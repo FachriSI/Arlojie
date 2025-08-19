@@ -3,6 +3,7 @@ import Navbar from "../../components/navbar";
 import Order from "../../assets/ordermanage/order.svg";
 import Deliver from "../../components/delivered";
 import Footer from "../../components/footer";
+import Detail from "../../components/detail";
 
 export const Ordermanage = () => {
   useEffect(() => {
@@ -10,6 +11,8 @@ export const Ordermanage = () => {
   }, []);
 
   const [filter, setFilter] = useState("All");
+  const [showDetail, setShowDetail] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   const orders = [
     {
@@ -138,7 +141,13 @@ export const Ordermanage = () => {
                     </div>
                   </div>
                   <div className="w-full md:w-auto flex justify-center md:justify-end mt-2 md:mt-0">
-                    <button className="bg-black text-white rounded-full px-8 py-3 font-semibold text-base md:text-lg shadow hover:bg-gray-900 transition-colors w-full md:w-auto">
+                    <button
+                      className="bg-black text-white rounded-full px-8 py-3 font-semibold text-base md:text-lg shadow hover:bg-gray-900 transition-colors w-full md:w-auto"
+                      onClick={() => {
+                        setSelectedOrder(order);
+                        setShowDetail(true);
+                      }}
+                    >
                       {order.status === "Delivered" ? "Beri Nilai" : "Detail"}
                     </button>
                   </div>
@@ -147,6 +156,20 @@ export const Ordermanage = () => {
           )}
         </div>
       </div>
+      {/* Modal Detail */}
+      {showDetail && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white rounded-xl shadow-lg p-6 relative max-w-xl w-full">
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-black text-xl"
+              onClick={() => setShowDetail(false)}
+            >
+              &times;
+            </button>
+            <Detail order={selectedOrder} />
+          </div>
+        </div>
+      )}
       <div className="mb-12"></div>
       <Footer />
     </div>
