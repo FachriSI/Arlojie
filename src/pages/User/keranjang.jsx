@@ -4,6 +4,7 @@ import KeranjangArlojie from "../../assets/keranjang/keranjangarlojie.svg";
 import Watch1 from "../../assets/Home/jam1.svg";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../components/footer";
+import Alamat from "../../components/alamat"; // Import Alamat
 
 const Keranjang = () => {
   const [cartItems, setCartItems] = useState([
@@ -12,11 +13,12 @@ const Keranjang = () => {
       name: "Longines Master AC 6570 Silver Stainless Steel Strap",
       price: 4545000,
       quantity: 1,
-      image: Watch1, // Changed from "Watch1" to Watch1 (imported image)
+      image: Watch1,
     },
   ]);
 
   const [estimatedShipping] = useState(25000);
+  const [showAlamat, setShowAlamat] = useState(false); // State untuk modal alamat
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,6 +44,17 @@ const Keranjang = () => {
     0
   );
   const grandTotal = subtotal + estimatedShipping;
+
+  // Fungsi submit alamat
+  const handleAlamatSubmit = (alamatData) => {
+    setShowAlamat(false);
+    navigate("/checkout");
+  };
+
+  // Fungsi batal alamat
+  const handleAlamatCancel = () => {
+    setShowAlamat(false);
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -201,7 +214,7 @@ const Keranjang = () => {
                 {/* Checkout Button */}
                 <button
                   className="w-full bg-black text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors"
-                  onClick={() => navigate("/checkout")}
+                  onClick={() => setShowAlamat(true)}
                 >
                   Checkout
                 </button>
@@ -210,6 +223,14 @@ const Keranjang = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal Alamat */}
+      {showAlamat && (
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <Alamat onSubmit={handleAlamatSubmit} onCancel={handleAlamatCancel} />
+        </div>
+      )}
+
       <Footer />
     </div>
   );
